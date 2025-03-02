@@ -19,7 +19,7 @@ router.get("/convert", async (req, res) => {
         });
 
         if (!foundIngredient) {
-            return res.status(404).json({ error: "Ingredient not found." });
+            return res.status(404).json({ error: "Ingredient not found." }); //error handling 
         }
 
         
@@ -38,3 +38,4 @@ router.get("/convert", async (req, res) => {
 });
 
 module.exports = router;
+
