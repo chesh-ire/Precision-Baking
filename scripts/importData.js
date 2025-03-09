@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
-const Ingredient = require("../models/Ingredient");
+const Ingredient = require("../models/Ingredient"); 
 
 
 mongoose.connect("mongodb://localhost:27017/precision_baking", {
