@@ -11,12 +11,27 @@ router.get("/convert", async (req, res) => {
         if (!ingredient || !amount || !unit) {
             return res.status(400).json({ error: "Missing required query parameters." });
         }
-        const decodedIngredient = decodeURIComponent(ingredient).replace(/\+/g,"").trim();
+        // const decodedIngredient = decodeURIComponent(ingredient).replace(/\+/g,"").trim();
+
+        // console.log("Searching for:", decodedIngredient);
+
+        // ✅ Normalize input: Remove spaces and convert to lowercase
+        const decodedIngredient = decodeURIComponent(ingredient).trim();
+        const normalizedIngredient = decodedIngredient.toLowerCase().replace(/\s+/g, "");
 
         console.log("Searching for:", decodedIngredient);
+        console.log("Normalized Search Query:", normalizedIngredient);
+
         
-        const foundIngredient = await Ingredient.findOne({ ingredient: { $regex: `^${decodedIngredient}$`, $options: "i" } 
+        // const foundIngredient = await Ingredient.findOne({ ingredient: { $regex: `^${decodedIngredient}$`, $options: "i" } 
+        // });
+
+        // ✅ Normalize search: Match ingredient by removing spaces & ignoring case
+        const foundIngredient = await Ingredient.findOne({ 
+            ingredient: { $regex: new RegExp(`^${normalizedIngredient}$`, "i") } 
         });
+
+        
 
         if (!foundIngredient) {
             return res.status(404).json({ error: "Ingredient not found." }); //error handling 
