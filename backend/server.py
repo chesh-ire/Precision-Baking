@@ -7,7 +7,7 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-model = tf.keras.models.load_model("prediction.keras")
+model = tf.keras.models.load_model("prediction_json.keras")
 
 with open("ingredient_mappings.json", "r") as f:
     ingredient_mappings = json.load(f)
