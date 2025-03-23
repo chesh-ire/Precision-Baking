@@ -1,0 +1,306 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Recipe - Culinary Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional styles specific to input-recipe page */
+        .recipe-form-container {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .recipe-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        label {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        input, select, textarea {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+            /* **changes */
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            /* **changes */
+        }
+        
+        .ingredient-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .ingredient-row input {
+            flex: 1;
+        }
+        
+        .add-btn {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .add-btn:hover {
+            background-color: #27ae60;
+        }
+        
+        .remove-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .remove-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .ingredients-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .success-message {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        /* Database integration styles */
+        .database-integration {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px dashed #3498db;
+        }
+
+        .database-integration h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .database-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .database-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.8rem 1.2rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .database-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .database-btn i {
+            font-size: 1.1rem;
+        }
+
+        .database-status {
+            display: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .database-status.success {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .database-status.error {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+         /* Additional styles for the output section */
+         .output-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            display: none; /* Hidden by default */
+        }
+
+        .output-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .output-section p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .output-section .predicted-mass {
+            font-weight: 600;
+            color: #27ae60;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Culinary <span>Explorer</span></h1>
+            <p>Share your culinary creations with the world</p>
+        </header>
+        
+        <a href="index.html" class="back-link">← Back to Home</a>
+        
+        <!-- <div class="success-message" id="success-message">
+            Your recipe has been submitted successfully! Thank you for sharing.
+        </div> -->
+        
+        <section class="recipe-form-container">
+            <h2>Add Your Recipe</h2>
+            <form class="recipe-form" id="recipe-form">
+                <div class="form-group">
+                    <label for="recipe-name">Recipe Name</label>
+                    <input type="text" id="recipe-name" placeholder="e.g., Homemade Chocolate Chip Cookies" required>
+                </div>
+                <div class="form-group">
+                    <label for="ingredient">Ingredient</label>
+                    <input type="text" id="ingredient" placeholder="e.g., Coconut flour" required>
+                </div>
+                <div class="form-group">
+                    <label for="volume">Volume</label>
+                    <select id="volume" required>
+                        <option value="1 cup">1 cup</option>
+                        <option value="1/2 cup">1/2 cup</option>
+                        <option value="1/4 cup">1/4 cup</option>
+                        <option value="2 cups">2 cups</option>
+                        <option value="1 teaspoon">1 teaspoon</option>
+                        <option value="1/2 teaspoon">1/2 teaspoon</option>
+                        <option value="2 tablespoons">2 tablespoons</option>
+                        <option value="1 tablespoon">1 tablespoon</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Submit Recipe</button> 
+
+                <!-- <label for="recipe-text">Enter Full Recipe</label>
+                <textarea id="recipe-text" placeholder="E.g., Mix 2 cups of flour with 1/2 teaspoon of salt..." required></textarea>
+            </div>
+            <button type="submit" class="btn">Submit Recipe</button> -->
+            </form>
+        </section>
+
+         <!-- New output section -->
+         <section class="output-section" id="output-section">
+            <h3>Predicted Mass</h3>
+            <p>The predicted mass for <span id="output-ingredient"></span> (<span id="output-volume"></span>) is: 
+               <span class="predicted-mass" id="output-mass"></span>
+            </p>
+        </section>
+
+
+        <footer>
+            <p>&copy; 2023 Culinary Explorer. All rights reserved.</p>
+        </footer>
+    </div>
+    </body>
+    <script src = "ai-script.js" >
+    </script>
+    </html> 
+    
