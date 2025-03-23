@@ -21,6 +21,12 @@ fs.readFile(filePath, "utf8", async (err, data) => {
   try {
     const ingredients = JSON.parse(data);
 
+     // #changes#Normalize ingredient names (convert to lowercase & remove spaces)
+     ingredients.forEach(ing => {
+      ing.ingredient = ing.ingredient.toLowerCase().replace(/\s+/g, "");
+    });
+    //#changes#
+
     await Ingredient.deleteMany({}); 
     await Ingredient.insertMany(ingredients); 
 
